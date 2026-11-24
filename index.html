@@ -1,107 +1,366 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>ClipPilot AI</title>
-<style>
-*{box-sizing:border-box}
-body{margin:0;background:#0b0914;color:#f5f3ff;font-family:Arial,sans-serif}
-header{padding:24px 7%;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid #282139}
-.logo{font-size:25px;font-weight:bold;color:#b69aff}
-button,select,input,textarea{font:inherit}
-button{cursor:pointer}
-.lang{background:#241b38;color:white;border:1px solid #6843a0;padding:10px 15px;border-radius:10px}
-main{max-width:1100px;margin:55px auto;padding:20px}
-h1{font-size:42px;margin-bottom:10px}
-h1 span{color:#b69aff}
-.subtitle{color:#aaa2bb;margin-bottom:35px}
-.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:17px}
-.card{background:#171321;border:1px solid #332746;padding:22px;border-radius:17px}
-.card h3{margin-top:0}
-.card p{color:#aaa2bb;line-height:1.5}
-label{display:block;margin:18px 0 8px;color:#c9b8e9}
-input,select,textarea{width:100%;padding:13px;border-radius:10px;border:1px solid #46345e;background:#100d19;color:white}
-textarea{min-height:95px;resize:vertical}
-.primary{background:linear-gradient(100deg,#763de0,#ae69ff);color:white;border:0;padding:14px 20px;border-radius:10px;font-weight:bold;width:100%;margin-top:18px}
-.primary:hover{filter:brightness(1.15)}
-#result{white-space:pre-wrap;line-height:1.7;color:#eee;margin-top:18px}
-footer{text-align:center;padding:35px;color:#82798f}
-@media(max-width:600px){h1{font-size:32px}main{margin:25px auto}}
-</style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ClipPilot AI</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: Arial, sans-serif;
+      color: white;
+      background: linear-gradient(135deg, #100d25, #25104a, #10152f);
+      padding: 35px 16px;
+    }
+
+    .container {
+      max-width: 750px;
+      margin: auto;
+    }
+
+    header {
+      text-align: center;
+      margin-bottom: 35px;
+    }
+
+    h1 {
+      font-size: 42px;
+      margin-bottom: 8px;
+      color: #bd8cff;
+    }
+
+    .subtitle {
+      color: #c8bddf;
+    }
+
+    .card {
+      background: rgba(255,255,255,0.08);
+      border: 1px solid rgba(255,255,255,0.15);
+      border-radius: 18px;
+      padding: 25px;
+      margin-bottom: 20px;
+    }
+
+    label {
+      display: block;
+      margin: 18px 0 8px;
+      font-weight: bold;
+    }
+
+    input, select {
+      width: 100%;
+      padding: 14px;
+      border-radius: 9px;
+      border: 1px solid #75629d;
+      background: #17132b;
+      color: white;
+      font-size: 15px;
+    }
+
+    button {
+      cursor: pointer;
+      border: none;
+      border-radius: 9px;
+      padding: 14px 20px;
+      font-size: 16px;
+      font-weight: bold;
+    }
+
+    #generateBtn {
+      width: 100%;
+      margin-top: 25px;
+      color: white;
+      background: linear-gradient(90deg, #783cf5, #bd65ff);
+    }
+
+    #generateBtn:hover {
+      opacity: 0.88;
+    }
+
+    #result {
+      display: none;
+      white-space: pre-wrap;
+      line-height: 1.7;
+      color: #eee5ff;
+      margin-top: 15px;
+    }
+
+    #copyBtn {
+      display: none;
+      margin-top: 15px;
+      color: white;
+      background: #493477;
+    }
+
+    .language {
+      text-align: right;
+      margin-bottom: 15px;
+    }
+
+    .language button {
+      background: transparent;
+      color: white;
+      padding: 7px 10px;
+    }
+
+    footer {
+      text-align: center;
+      color: #a99cbd;
+      font-size: 13px;
+      margin-top: 30px;
+    }
+  </style>
 </head>
+
 <body>
-<header>
-<div class="logo">✦ ClipPilot AI</div>
-<select class="lang" id="language" onchange="changeLang()">
-<option value="fr">FR</option><option value="en">EN</option>
-</select>
-</header>
-<main>
-<h1 id="heading">Crée du contenu <span>plus intelligemment.</span></h1>
-<p class="subtitle" id="subheading">Ton studio de création assisté par intelligence artificielle.</p>
-<div class="grid">
-<div class="card"><h3>💡 <span data-fr="Idées de vidéos" data-en="Video ideas">Idées de vidéos</span></h3><p data-fr="Trouve l'inspiration pour tes prochaines publications." data-en="Find inspiration for your next posts.">Trouve l'inspiration pour tes prochaines publications.</p></div>
-<div class="card"><h3>📝 <span data-fr="Scripts" data-en="Scripts">Scripts</span></h3><p data-fr="Prépare le texte de tes vidéos facilement." data-en="Prepare your video scripts easily.">Prépare le texte de tes vidéos facilement.</p></div>
-<div class="card"><h3>🚀 <span data-fr="Titres" data-en="Titles">Titres</span></h3><p data-fr="Imagine des titres adaptés à ton audience." data-en="Create titles for your audience.">Imagine des titres adaptés à ton audience.</p></div>
-</div>
-<div class="card" style="margin-top:25px">
-<h2 id="tooltitle">Ton générateur de contenu</h2>
-<label id="topiclabel" for="topic">Quel est le sujet de ta vidéo ?</label>
-<input id="topic" placeholder="Ex : Les meilleurs jeux vidéo">
-<label id="platformlabel" for="platform">Plateforme</label>
-<select id="platform"><option>YouTube</option><option>TikTok</option><option>Instagram</option></select>
-<label id="typelabel" for="type">Que veux-tu générer ?</label>
-<select id="type">
-<option value="ideas">Idées de vidéos</option>
-<option value="script">Script vidéo</option>
-<option value="titles">Titres accrocheurs</option>
-<option value="description">Description et hashtags</option>
-</select>
-<button class="primary" id="generate" onclick="generate()">Générer mon contenu ✨</button>
-<div id="result" aria-live="polite"></div>
-<button class="lang" id="copy" onclick="copyResult()" style="display:none;margin-top:12px">Copier le résultat</button>
-</div>
-</main>
-<footer>ClipPilot AI · Create smarter. Grow faster.</footer>
-<script>
-function changeLang(){
-const en=document.getElementById('language').value==='en';
-document.documentElement.lang=en?'en':'fr';
-document.getElementById('heading').innerHTML=en?'Create content <span>smarter.</span>':'Crée du contenu <span>plus intelligemment.</span>';
-document.getElementById('subheading').textContent=en?'Your AI-powered content studio.':'Ton studio de création assisté par intelligence artificielle.';
-document.querySelectorAll('[data-fr]').forEach(el=>el.textContent=en?el.dataset.en:el.dataset.fr);
-const labels=en?['Your content generator','What is your video about?','Platform','What do you want to generate?','Generate my content ✨','Copy result']:['Ton générateur de contenu','Quel est le sujet de ta vidéo ?','Plateforme','Que veux-tu générer ?','Générer mon contenu ✨','Copier le résultat'];
-['tooltitle','topiclabel','platformlabel','typelabel','generate','copy'].forEach((id,i)=>document.getElementById(id).textContent=labels[i]);
-const types=document.getElementById('type');
-types.options[0].text=en?'Video ideas':'Idées de vidéos';
-types.options[1].text=en?'Video script':'Script vidéo';
-types.options[2].text=en?'Catchy titles':'Titres accrocheurs';
-types.options[3].text=en?'Description and hashtags':'Description et hashtags';
-document.getElementById('topic').placeholder=en?'E.g. Best video games':'Ex : Les meilleurs jeux vidéo';
-document.getElementById('result').textContent='';
-}
-function generate(){
-const en=document.getElementById('language').value==='en';
-const topic=document.getElementById('topic').value.trim();
-const platform=document.getElementById('platform').value;
-const type=document.getElementById('type').value;
-if(!topic){alert(en?'Please enter a topic.':'Entre un sujet pour commencer.');return;}
-const formats={
-ideas:en?['A beginner guide to '+topic,'5 surprising facts about '+topic,'My personal experience with '+topic]:['Un guide pour débuter sur '+topic,'5 faits surprenants sur '+topic,'Mon expérience personnelle avec '+topic],
-script:en?['HOOK: Did you know something surprising about '+topic+'?','INTRO: Today, we explore '+topic+'.','MAIN: Present three useful points with examples.','CONCLUSION: What do you think? Share your opinion!']:['ACCROCHE : Savais-tu qu’il existe des choses surprenantes sur '+topic+' ?','INTRODUCTION : Aujourd’hui, nous allons découvrir '+topic+'.','DÉVELOPPEMENT : Présente trois points intéressants avec des exemples.','CONCLUSION : Qu’en penses-tu ? Donne ton avis !'],
-titles:en?['Everything you need to know about '+topic,'5 things nobody tells you about '+topic,'I tried '+topic and here is what happened']:['Tout ce que tu dois savoir sur '+topic,'5 choses que personne ne te dit sur '+topic,'J’ai testé '+topic : voici le résultat'],
-description:en?['Discover everything about '+topic+'!','Follow for more content.','#'+topic.replace(/\s+/g,'')+' #creator #content']:['Découvre tout sur '+topic+' !','Abonne-toi pour découvrir davantage de contenu.','#'+topic.replace(/\s+/g,'')+' #createur #contenu']
-};
-const title={ideas:en?'VIDEO IDEAS': 'IDÉES DE VIDÉOS',script:'SCRIPT',titles:en?'TITLE IDEAS':'IDÉES DE TITRES',description:en?'DESCRIPTION & HASHTAGS':'DESCRIPTION & HASHTAGS'};
-document.getElementById('result').textContent='✦ '+title[type]+' · '+platform+'\n\n'+formats[type].map((x,i)=>(i+1)+'. '+x).join('\n\n')+'\n\n'+(en?'Demo template – not generated by a connected AI model.':'Modèle de démonstration – aucune IA externe n’est connectée.');
-document.getElementById('copy').style.display='inline-block';
-}
-function copyResult(){
-const text=document.getElementById('result').textContent;
-if(navigator.clipboard&&window.isSecureContext){navigator.clipboard.writeText(text).then(()=>alert('Copié !'));}
-else{alert('Sélectionne le résultat et copie-le avec Ctrl+C.');}
-}
-</script>
+  <main class="container">
+
+    <div class="language">
+      <button id="frBtn">🇫🇷 Français</button>
+      <button id="enBtn">🇬🇧 English</button>
+    </div>
+
+    <header>
+      <h1>ClipPilot AI 🚀</h1>
+      <p class="subtitle" id="subtitle">
+        Crée du contenu pour tes réseaux sociaux en quelques secondes.
+      </p>
+    </header>
+
+    <section class="card">
+      <label for="topic" id="topicLabel">Quel est le sujet de ta vidéo ?</label>
+      <input id="topic" type="text" placeholder="Exemple : Minecraft, football, gaming...">
+
+      <label for="platform" id="platformLabel">Plateforme</label>
+      <select id="platform">
+        <option value="TikTok">TikTok</option>
+        <option value="YouTube">YouTube</option>
+        <option value="Instagram">Instagram</option>
+      </select>
+
+      <label for="type" id="typeLabel">Type de contenu</label>
+      <select id="type">
+        <option value="Idée de vidéo">Idée de vidéo</option>
+        <option value="Script">Script</option>
+        <option value="Titre et description">Titre et description</option>
+        <option value="Hashtags">Hashtags</option>
+      </select>
+
+      <button id="generateBtn">✨ Générer mon contenu</button>
+    </section>
+
+    <section class="card">
+      <h2 id="resultTitle">Ton résultat</h2>
+      <div id="result"></div>
+      <button id="copyBtn">📋 Copier le résultat</button>
+    </section>
+
+    <footer>
+      ClipPilot AI – Ton assistant de création de contenu
+    </footer>
+
+  </main>
+
+  <script>
+    const topicInput = document.getElementById("topic");
+    const platformInput = document.getElementById("platform");
+    const typeInput = document.getElementById("type");
+    const generateBtn = document.getElementById("generateBtn");
+    const result = document.getElementById("result");
+    const copyBtn = document.getElementById("copyBtn");
+
+    let language = "fr";
+    let generatedText = "";
+
+    function generate() {
+      const topic = topicInput.value.trim();
+      const platform = platformInput.value;
+      const type = typeInput.value;
+
+      if (!topic) {
+        alert(language === "fr"
+          ? "Écris d'abord le sujet de ta vidéo !"
+          : "Enter your video topic first!");
+        topicInput.focus();
+        return;
+      }
+
+      let content = "";
+
+      if (language === "fr") {
+        if (type === "Idée de vidéo") {
+          content =
+            "🎬 IDÉE DE VIDÉO\n\n" +
+            "Sujet : " + topic + "\n\n" +
+            "Concept : réalise une vidéo originale sur " + topic +
+            " avec un début accrocheur, un moment surprenant et une conclusion qui donne envie de réagir.\n\n" +
+            "💡 Conseil : commence directement par le moment le plus intéressant !";
+        }
+
+        if (type === "Script") {
+          content =
+            "🎤 SCRIPT\n\n" +
+            "INTRODUCTION :\n" +
+            "« Salut tout le monde ! Aujourd'hui, on se retrouve pour parler de " +
+            topic + " ! »\n\n" +
+            "DÉVELOPPEMENT :\n" +
+            "Présente ton sujet, partage tes idées et ajoute un moment surprenant pour retenir l'attention.\n\n" +
+            "CONCLUSION :\n" +
+            "« Dites-moi ce que vous en pensez en commentaire et à très bientôt ! »";
+        }
+
+        if (type === "Titre et description") {
+          content =
+            "📌 TITRE :\n" +
+            topic + " : vous n'allez pas y croire !\n\n" +
+            "📝 DESCRIPTION :\n" +
+            "Bienvenue dans cette nouvelle vidéo consacrée à " + topic +
+            " ! Découvre notre contenu et partage ton avis en commentaire.\n\n" +
+            "Abonne-toi pour ne rien manquer !";
+        }
+
+        if (type === "Hashtags") {
+          const cleanTopic = topic.toLowerCase().replace(/\s+/g, "");
+          content =
+            "🔖 HASHTAGS :\n\n" +
+            "# " + cleanTopic + "\n" +
+            "#gaming\n#video\n#youtube\n#tiktok\n#instagram\n#creator\n#decouverte";
+        }
+      } else {
+        if (type === "Idée de vidéo") {
+          content =
+            "🎬 VIDEO IDEA\n\n" +
+            "Topic: " + topic + "\n\n" +
+            "Concept: Create an original video about " + topic +
+            " with a strong opening, a surprising moment and an engaging ending.";
+        }
+
+        if (type === "Script") {
+          content =
+            "🎤 SCRIPT\n\n" +
+            "INTRO:\n" +
+            '"Hey everyone! Welcome back! Today we are talking about ' +
+            topic + '!"\n\n' +
+            "MAIN PART:\n" +
+            "Present your topic, share your ideas and add a surprising moment.\n\n" +
+            "ENDING:\n" +
+            '"Tell us what you think in the comments. See you soon!"';
+        }
+
+        if (type === "Titre et description") {
+          content =
+            "📌 TITLE:\n" +
+            topic + " – You won't believe this!\n\n" +
+            "📝 DESCRIPTION:\n" +
+            "Welcome to our new video about " + topic +
+            "! Share your opinion in the comments and subscribe for more.";
+        }
+
+        if (type === "Hashtags") {
+          const cleanTopic = topic.toLowerCase().replace(/\s+/g, "");
+          content =
+            "🔖 HASHTAGS:\n\n" +
+            "#" + cleanTopic +
+            "\n#gaming\n#video\n#youtube\n#tiktok\n#instagram\n#creator";
+        }
+      }
+
+      generatedText = content;
+      result.textContent = content;
+      result.style.display = "block";
+      copyBtn.style.display = "inline-block";
+    }
+
+    function copyResult() {
+      if (!generatedText) return;
+
+      if (navigator.clipboard && window.isSecureContext) {
+        navigator.clipboard.writeText(generatedText)
+          .then(() => alert(language === "fr"
+            ? "Résultat copié !"
+            : "Result copied!"))
+          .catch(() => fallbackCopy());
+      } else {
+        fallbackCopy();
+      }
+    }
+
+    function fallbackCopy() {
+      const temporary = document.createElement("textarea");
+      temporary.value = generatedText;
+      document.body.appendChild(temporary);
+      temporary.select();
+      document.execCommand("copy");
+      temporary.remove();
+      alert(language === "fr" ? "Résultat copié !" : "Result copied!");
+    }
+
+    function changeLanguage(lang) {
+      language = lang;
+
+      document.documentElement.lang = lang;
+
+      document.getElementById("subtitle").textContent =
+        lang === "fr"
+          ? "Crée du contenu pour tes réseaux sociaux en quelques secondes."
+          : "Create social media content in seconds.";
+
+      document.getElementById("topicLabel").textContent =
+        lang === "fr" ? "Quel est le sujet de ta vidéo ?" : "What is your video topic?";
+
+      topicInput.placeholder =
+        lang === "fr" ? "Exemple : Minecraft, football, gaming..." : "Example: Minecraft, football, gaming...";
+
+      document.getElementById("platformLabel").textContent =
+        lang === "fr" ? "Plateforme" : "Platform";
+
+      document.getElementById("typeLabel").textContent =
+        lang === "fr" ? "Type de contenu" : "Content type";
+
+      document.getElementById("resultTitle").textContent =
+        lang === "fr" ? "Ton résultat" : "Your result";
+
+      generateBtn.textContent =
+        lang === "fr" ? "✨ Générer mon contenu" : "✨ Generate my content";
+
+      copyBtn.textContent =
+        lang === "fr" ? "📋 Copier le résultat" : "📋 Copy result";
+
+      const types = lang === "fr"
+        ? ["Idée de vidéo", "Script", "Titre et description", "Hashtags"]
+        : ["Video idea", "Script", "Title and description", "Hashtags"];
+
+      typeInput.innerHTML = "";
+      types.forEach((name, index) => {
+        const option = document.createElement("option");
+        option.value = [
+          "Idée de vidéo",
+          "Script",
+          "Titre et description",
+          "Hashtags"
+        ][index];
+        option.textContent = name;
+        typeInput.appendChild(option);
+      });
+    }
+
+    // Ces événements relient les boutons à leurs fonctions.
+    generateBtn.addEventListener("click", generate);
+    copyBtn.addEventListener("click", copyResult);
+
+    document.getElementById("frBtn").addEventListener("click", () => {
+      changeLanguage("fr");
+    });
+
+    document.getElementById("enBtn").addEventListener("click", () => {
+      changeLanguage("en");
+    });
+  </script>
 </body>
 </html>
